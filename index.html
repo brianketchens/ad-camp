@@ -24,20 +24,28 @@
 
         /* Fixed Ad Dimensions (Perfect aspect ratio for mobile/LinkedIn card) */
         .ad-container {
-            width: 100%;
-            max-width: 450px;
-            height: 550px;
-            background-color: #1e293b; /* Sleek card background */
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-            overflow: hidden;
-            border: 1px solid #334155;
-            position: relative;
-        }
+    width: 100%;
+    max-width: 450px;
+    
+    /* CHANGE THIS LINE: Removes the rigid wall and sets a safe minimum instead */
+    min-height: 500px; 
+    height: auto; 
+    
+    background-color: #1e293b; 
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    
+    /* CHANGE THIS LINE: box-sizing ensures padding doesn't accidentally widen the card */
+    box-sizing: border-box; 
+    
+    overflow: hidden;
+    border: 1px solid #334155;
+    position: relative;
+    }
 
         /* Header Hook styling */
         .ad-header h1 {
@@ -204,6 +212,27 @@ input[type="range"]::-webkit-slider-thumb:active {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- MOBILE RESPONSIVE TWEAKS --- */
+
+/* Targets screens smaller than 480px wide (like the iPhone 12 mini) */
+@media (max-width: 480px) {
+    
+    input[type="range"]::-webkit-slider-thumb {
+        /* Scale the avatar down so it doesn't overwhelm the mobile screen */
+        width: 45px; 
+        height: 45px;
+        
+        /* Re-adjust the vertical alignment so his feet stay on the track */
+        transform: translateY(-15px); 
+    }
+    
+    /* Optional: If your "YOU NEED A BrIAnalyst" text looks too big on your phone, 
+       you can scale down the header font here too! */
+    h1, .header-text {
+        font-size: 1.5rem; 
+    }
+}
     </style>
 </head>
 <body>
