@@ -1,0 +1,181 @@
+/* Reset & Core Styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #0f172a; /* Extra dark slate background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #f8fafc;
+}
+
+/* Fixed Ad Dimensions (Perfect aspect ratio for mobile/LinkedIn card) */
+.ad-container {
+    width: 100%;
+    max-width: 450px;
+    height: 550px;
+    background-color: #1e293b; /* Sleek card background */
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid #334155;
+    position: relative;
+}
+
+/* Header Hook styling */
+.ad-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    color: #cbd5e1;
+    transition: color 0.5s ease;
+}
+
+/* Display Arena & SVG Chart */
+.display-arena {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 20px 0;
+}
+
+#chart-svg {
+    width: 100%;
+    height: 180px;
+    overflow: visible;
+}
+
+/* KPI Pop-up Card */
+.kpi-card {
+    position: absolute;
+    background: rgba(30, 41, 59, 0.85);
+    border: 2px solid #10b981; /* Neon green success border */
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transform: scale(0);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Snappy pop animation */
+}
+
+.kpi-card.show {
+    transform: scale(1);
+}
+
+.kpi-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #10b981;
+}
+
+/* Control Deck & Slider Styling */
+.control-deck {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.slider-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Premium Custom Slider Track & Thumb */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #334155;
+    border-radius: 4px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #38bdf8; /* Glowing neon blue */
+    cursor: pointer;
+    box-shadow: 0 0 10px #38bdf8;
+    transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+/* Call to Action Reveal Styling */
+.cta-container {
+    text-align: center;
+    animation: fadeIn 0.5s ease forward;
+}
+
+.cta-text {
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    margin-bottom: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

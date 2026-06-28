@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Intelligence Interactive Showcase</title>
+    <style>
+        /* Reset & Core Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a; /* Extra dark slate background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+
+        /* Fixed Ad Dimensions (Perfect aspect ratio for mobile/LinkedIn card) */
+        .ad-container {
+            width: 100%;
+            max-width: 450px;
+            height: 550px;
+            background-color: #1e293b; /* Sleek card background */
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        /* Header Hook styling */
+        .ad-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            color: #cbd5e1;
+            transition: color 0.5s ease;
+        }
+
+        /* Display Arena & SVG Chart */
+        .display-arena {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        #chart-svg {
+            width: 100%;
+            height: 180px;
+            overflow: visible;
+        }
+
+        /* KPI Pop-up Card */
+        .kpi-card {
+            position: absolute;
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid #10b981; /* Neon green success border */
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .kpi-card.show {
+            transform: scale(1);
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+        }
+
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        /* Control Deck & Slider Styling */
+        .control-deck {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* --- CUSTOM RUNNING AVATAR SLIDER --- */
+
+/* 1. Base Slider Track styling */
+input[type="range"] {
+    -webkit-appearance: none; /* Required to remove browser defaults */
+    width: 100%;
+    height: 8px; /* Track height */
+    background: #334155; /* Slate track color */
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* 2. Custom Thumb (The Running Avatar) */
+/* This defines the style for WebKit browsers (Chrome, Safari, Edge, most mobile) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Required to apply custom image */
+    width: 60px; /* Precise width for the running figure */
+    height: 60px; /* Precise height to contain the full avatar */
+    
+    /* THE MAGIC: Link to your optimized image asset */
+    background-image: url('avatar-running.png');
+    
+    background-size: contain; /* Ensures figure scales nicely */
+    background-repeat: no-repeat;
+    background-position: center; /* Centers the figure on the track line */
+    cursor: grab; /* Pointer cue: 'grab me' */
+    
+    border: none; /* Removes any default borders */
+    
+    /* Crucial alignment: The image's center must sit on the track */
+    transform: translateY(12px); /* Adjust this value if the figure is too high/low */
+}
+
+/* Optional hover interaction: makes the grab more responsive */
+input[type="range"]::-webkit-slider-thumb:active {
+    cursor: grabbing;
+}
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        /* Call to Action Reveal Styling */
+        .cta-container {
+            text-align: center;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .cta-text {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ad-container">
+        <header class="ad-header">
+            <h1 id="headline">Raw data needs professional help...</h1>
+        </header>
+
+        <main class="display-arena">
+            <svg id="chart-svg" viewBox="0 0 500 200" preserveAspectRatio="none"></svg>
+
+            <div id="kpi-card" class="kpi-card hidden">
+                <span class="kpi-label">HARD SAVINGS</span>
+                <span class="kpi-value">$250K</span>
+            </div>
+        </main>
+
+        <footer class="control-deck">
+            <div id="slider-zone" class="slider-container">
+                <label for="logic-slider" class="slider-label">IT NEEDS A <strong style="color: #38bdf8;">B</strong>r<strong style="color: #38bdf8;">IAnalyst</strong>
+                <input type="range" id="logic-slider" min="0" max="100" value="0">
+            </div>
+
+            <div id="cta-zone" class="cta-container hidden">
+                <p class="cta-text">I'm the BI professional your data and organization needs.</p>
+                <a href="https://brianketchens.github.io/#portfolio" target="_blank" id="cta-button" class="cta-button">Explore Full Portfolio</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const slider = document.getElementById('logic-slider');
+        const chartSvg = document.getElementById('chart-svg');
+        const headline = document.getElementById('headline');
+        const kpiCard = document.getElementById('kpi-card');
+        const sliderZone = document.getElementById('slider-zone');
+        const ctaZone = document.getElementById('cta-zone');
+
+        const totalPoints = 30;
+        const width = 500;
+        const height = 200;
+        
+        const basePoints = [];
+        for (let i = 0; i < totalPoints; i++) {
+            const x = (width / (totalPoints - 1)) * i;
+            const y = height - 40 - (i * 4);
+            basePoints.push({ x, y });
+        }
+
+        const noise = basePoints.map(() => (Math.random() - 0.5) * 70);
+
+        function renderChart(progress) {
+            chartSvg.innerHTML = '';
+
+            const gridColor = "#334155";
+            const textColor = "#64748b";
+            const yLevels = [40, 90, 140];
+            const labels = ["100k", "50k", "0k"];
+            
+            yLevels.forEach((yVal, i) => {
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", "45");
+                line.setAttribute("y1", yVal);
+                line.setAttribute("x2", width - 10);
+                line.setAttribute("y2", yVal);
+                line.setAttribute("stroke", gridColor);
+                line.setAttribute("stroke-width", "1");
+                line.setAttribute("stroke-dasharray", "4 4");
+                chartSvg.appendChild(line);
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", "10");
+                text.setAttribute("y", yVal + 4);
+                text.setAttribute("fill", textColor);
+                text.setAttribute("font-size", "10px");
+                text.setAttribute("font-weight", "600");
+                text.textContent = labels[i];
+                chartSvg.appendChild(text);
+            });
+
+            const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xAxis.setAttribute("x1", "45");
+            xAxis.setAttribute("y1", height - 20);
+            xAxis.setAttribute("x2", width - 10);
+            xAxis.setAttribute("y2", height - 20);
+            xAxis.setAttribute("stroke", "#475569");
+            xAxis.setAttribute("stroke-width", "1.5");
+            chartSvg.appendChild(xAxis);
+
+            const noiseFactor = (100 - progress) / 100;
+
+            const dynamicPoints = basePoints.map((pt, index) => {
+                const paddingLeft = 45;
+                const playableWidth = width - 10 - paddingLeft;
+                const shiftedX = paddingLeft + ((playableWidth / (totalPoints - 1)) * index);
+                
+                return {
+                    x: shiftedX,
+                    y: pt.y + (noise[index] * noiseFactor)
+                };
+            });
+
+            let pathData = `M ${dynamicPoints[0].x} ${dynamicPoints[0].y}`;
+            for (let i = 1; i < dynamicPoints.length; i++) {
+                pathData += ` L ${dynamicPoints[i].length ? '' : dynamicPoints[i].x} ${dynamicPoints[i].y}`;
+            }
+
+            const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            pathElement.setAttribute("d", pathData);
+            pathElement.setAttribute("fill", "none");
+            
+            if (progress < 40) {
+                pathElement.setAttribute("stroke", "#ef4444");
+                pathElement.setAttribute("stroke-width", "2");
+            } else if (progress < 90) {
+                pathElement.setAttribute("stroke", "#94a3b8");
+                pathElement.setAttribute("stroke-width", "2.5");
+            } else {
+                pathElement.setAttribute("stroke", "#38bdf8");
+                pathElement.setAttribute("stroke-width", "4");
+                pathElement.style.filter = "drop-shadow(0px 0px 6px #38bdf8)";
+            }
+            
+            pathElement.style.transition = "stroke 0.2s ease, stroke-width 0.2s ease";
+            chartSvg.appendChild(pathElement);
+        }
+
+        slider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            renderChart(value);
+
+            if (value > 10 && value < 50) {
+                headline.textContent = "Filtering variance & normalizing trends...";
+                headline.style.color = "#94a3b8";
+            } else if (value >= 50 && value < 100) {
+                headline.textContent = "Validating data integrity...";
+                headline.style.color = "#67e8f9";
+            } else if (value === 100) {
+                headline.textContent = "Building the definitive bridge between chaotic variance and executive execution.";
+                headline.style.color = "#10b981";
+                
+                kpiCard.classList.remove('hidden');
+                setTimeout(() => kpiCard.classList.add('show'), 50);
+
+                setTimeout(() => {
+                    sliderZone.style.opacity = '0';
+                    setTimeout(() => {
+                        sliderZone.classList.add('hidden');
+                        ctaZone.classList.remove('hidden');
+                    }, 300);
+                }, 1200);
+            } else {
+                headline.textContent = "Raw data needs professional help...";
+                headline.style.color = "#cbd5e1";
+            }
+        });
+
+        renderChart(0);
+    </script>
+</body>
+</html>
