@@ -24,28 +24,22 @@
 
         /* Fixed Ad Dimensions (Perfect aspect ratio for mobile/LinkedIn card) */
         .ad-container {
-    width: 100%;
-    max-width: 450px;
-    
-    /* CHANGE THIS LINE: Removes the rigid wall and sets a safe minimum instead */
-    min-height: 500px; 
-    height: auto; 
-    
-    background-color: #1e293b; 
-    border-radius: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px;
-    
-    /* CHANGE THIS LINE: box-sizing ensures padding doesn't accidentally widen the card */
-    box-sizing: border-box; 
-    
-    overflow: hidden;
-    border: 1px solid #334155;
-    position: relative;
-    }
+            width: 100%;
+            max-width: 450px;
+            min-height: 500px; 
+            height: auto; 
+            background-color: #1e293b; 
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+            box-sizing: border-box; 
+            overflow: hidden;
+            border: 1px solid #334155;
+            position: relative;
+        }
 
         /* Header Hook styling */
         .ad-header h1 {
@@ -130,45 +124,41 @@
 
         /* --- CUSTOM RUNNING AVATAR SLIDER --- */
 
-/* 1. Base Slider Track styling */
-input[type="range"] {
-    -webkit-appearance: none; /* Required to remove browser defaults */
-    width: 100%;
-    height: 8px; /* Track height */
-    background: #334155; /* Slate track color */
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-}
+        /* Base Slider Track styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
 
-/* 2. Custom Thumb (The Running Avatar) */
-/* This defines the style for WebKit browsers (Chrome, Safari, Edge, most mobile) */
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Required to apply custom image */
-    width: 60px; /* Precise width for the running figure */
-    height: 60px; /* Precise height to contain the full avatar */
-    
-    /* THE MAGIC: Link to your optimized image asset */
-    background-image: url('avatar-running.png?v=2');
-    
-    background-size: contain; /* Ensures figure scales nicely */
-    background-repeat: no-repeat;
-    background-position: center; /* Centers the figure on the track line */
-    cursor: grab; /* Pointer cue: 'grab me' */
-    
-    border: none; /* Removes any default borders */
-    
-    /* Crucial alignment: The image's center must sit on the track */
-    transform: translateY(12px); /* Adjust this value if the figure is too high/low */
-}
+        /* Custom Thumb (The Running Avatar) for Desktop */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px; 
+            height: 60px; 
+            background-image: url('avatar-running.png?v=2');
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center; 
+            cursor: grab; 
+            background-color: transparent !important;
+            border: none !important; 
+            box-shadow: none !important;
+            transform: translateY(12px); 
+        }
 
-/* Optional hover interaction: makes the grab more responsive */
-input[type="range"]::-webkit-slider-thumb:active {
-    cursor: grabbing;
-}
+        input[type="range"]::-webkit-slider-thumb:active {
+            cursor: grabbing;
+        }
 
         input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) translateY(10px);
         }
 
         /* Call to Action Reveal Styling */
@@ -194,7 +184,7 @@ input[type="range"]::-webkit-slider-thumb:active {
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.95rem;
-            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 4px 14 rgba(56, 189, 248, 0.4);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -214,25 +204,17 @@ input[type="range"]::-webkit-slider-thumb:active {
         }
 
         /* --- MOBILE RESPONSIVE TWEAKS --- */
-
-/* Targets screens smaller than 480px wide (like the iPhone 12 mini) */
-@media (max-width: 480px) {
-    
-    input[type="range"]::-webkit-slider-thumb {
-        /* Scale the avatar down so it doesn't overwhelm the mobile screen */
-        width: 45px; 
-        height: 45px;
-        
-        /* Re-adjust the vertical alignment so his feet stay on the track */
-        transform: translateY(-15px); 
-    }
-    
-    /* Optional: If your "YOU NEED A BrIAnalyst" text looks too big on your phone, 
-       you can scale down the header font here too! */
-    h1, .header-text {
-        font-size: 1.5rem; 
-    }
-}
+        @media (max-width: 480px) {
+            input[type="range"]::-webkit-slider-thumb {
+                width: 45px; 
+                height: 45px;
+                transform: translateY(-15px); 
+            }
+            
+            h1, .header-text {
+                font-size: 1.15rem; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -253,12 +235,12 @@ input[type="range"]::-webkit-slider-thumb:active {
 
         <footer class="control-deck">
             <div id="slider-zone" class="slider-container">
-                <label for="logic-slider" class="slider-label">IT NEEDS A <strong style="color: #38bdf8;">B</strong>r<strong style="color: #38bdf8;">IAnalyst</strong>
+                <label for="logic-slider" class="slider-label">IT NEEDS A <strong style="color: #38bdf8;">B</strong>r<strong style="color: #38bdf8;">IAnalyst</strong></label>
                 <input type="range" id="logic-slider" min="0" max="100" value="0">
             </div>
 
             <div id="cta-zone" class="cta-container hidden">
-                <p class="cta-text">I'm the BI professional your data and organization needs.</p>
+                <p class="cta-text">Building the definitive bridge between chaotic variance and executive execution.</p>
                 <a href="https://brianketchens.github.io/#portfolio" target="_blank" id="cta-button" class="cta-button">Explore Full Portfolio</a>
             </div>
         </footer>
@@ -338,7 +320,7 @@ input[type="range"]::-webkit-slider-thumb:active {
 
             let pathData = `M ${dynamicPoints[0].x} ${dynamicPoints[0].y}`;
             for (let i = 1; i < dynamicPoints.length; i++) {
-                pathData += ` L ${dynamicPoints[i].length ? '' : dynamicPoints[i].x} ${dynamicPoints[i].y}`;
+                pathData += ` L ${dynamicPoints[i].x} ${dynamicPoints[i].y}`;
             }
 
             const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
